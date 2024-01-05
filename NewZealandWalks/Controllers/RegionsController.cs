@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewZealandWalks.Data;
+using NewZealandWalks.Models.Domain;
 using NewZealandWalks.Models.DTOs;
 
 namespace NewZealandWalks.Controllers
@@ -53,6 +54,30 @@ namespace NewZealandWalks.Controllers
             };
 
             return Ok(regionsDTO);
+        }
+
+        [HttpPost]
+        public IActionResult CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDTO) 
+        {
+            var regionDomainModel = new Region
+            {
+                Code = addRegionRequestDTO.Code,
+                Name = addRegionRequestDTO.Name,
+                RegionImageUrl = addRegionRequestDTO.RegionImageUrl,
+            };
+            _db.Regions.Add(regionDomainModel);
+            _db.SaveChanges();
+
+            var regionDTO = new RegionDTO 
+            {
+                Id = regionDomainModel.Id,
+                Name = regionDomainModel.Name,
+                Code = regionDomainModel.Code,
+                RegionImageUrl = regionDomainModel.RegionImageUrl,
+            };
+            return CreatedAtAction(nameof(GetRegionById),new {  id = regionDTO.Id },regionDTO);
+
+             
         }
 
     }
