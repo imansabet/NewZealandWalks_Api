@@ -20,5 +20,19 @@ namespace NewZealandWalks.Controllers
             var regions = _db.Regions.ToList();
             return Ok(regions);
         }
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetRegionById([FromRoute]Guid id) 
+        {
+            //var region = _db.Regions.Find(id);
+            var region = _db.Regions.FirstOrDefault(r => r.Id == id);
+
+            if (region == null) 
+            {
+                return NotFound();
+            }
+            return Ok(region);
+        }
+
     }
 }
