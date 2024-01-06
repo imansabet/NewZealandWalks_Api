@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewZealandWalks.Data;
@@ -14,27 +15,34 @@ namespace NewZealandWalks.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IRegionRepository _regionRepository;
-        public RegionsController(ApplicationDbContext db,IRegionRepository regionRepository)
+        private readonly IMapper _mapper;
+
+        public RegionsController(ApplicationDbContext db,IRegionRepository regionRepository,IMapper mapper)
         {
             _db = db;
             _regionRepository = regionRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll() 
         {
             var regionsDomain = await  _regionRepository.GetAllAsync();
-            var regionsDTO = new List<RegionDTO>();
-            foreach (var region in regionsDomain) 
-            {
-                regionsDTO.Add(new RegionDTO()
-                {
-                    Id = region.Id,
-                    Name= region.Name,
-                    Code = region.Code,
-                    RegionImageUrl = region.RegionImageUrl,
-                });
-            }
+            //var regionsDTO = new List<RegionDTO>();
+            //foreach (var region in regionsDomain) 
+            //{
+            //    regionsDTO.Add(new RegionDTO()
+            //    {
+            //        Id = region.Id,
+            //        Name= region.Name,
+            //        Code = region.Code,
+            //        RegionImageUrl = region.RegionImageUrl,
+            //    });
+            //}
+
+            //map domain model to dto 
+            var regionsDTO = _mapper.Map<List<RegionDTO>>(regionsDomain);
+
             return Ok(regionsDTO);
         }
         [HttpGet]
