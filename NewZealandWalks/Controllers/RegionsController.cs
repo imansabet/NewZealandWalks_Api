@@ -42,7 +42,7 @@ namespace NewZealandWalks.Controllers
         public async Task<IActionResult> GetRegionById([FromRoute]Guid id) 
         {
             //var region = _db.Regions.Find(id);
-            var regionsDomain = await _db.Regions.FirstOrDefaultAsync(r => r.Id == id);
+            var regionsDomain = await _regionRepository.GetByIdAsync(id);
 
             if (regionsDomain == null) 
             {

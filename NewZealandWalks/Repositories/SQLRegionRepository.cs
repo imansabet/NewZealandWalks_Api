@@ -16,5 +16,10 @@ namespace NewZealandWalks.Repositories
         {
             return await _db.Regions.ToListAsync();
         }
+
+        public async Task<Region?> GetByIdAsync(Guid id)
+        {
+            return await _db.Regions.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }
