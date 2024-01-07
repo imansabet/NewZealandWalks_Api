@@ -31,5 +31,14 @@ namespace NewZealandWalks.Controllers
 
             
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        { 
+            var walksDomainModel = await _walkRepository.GetAllAsync();
+            //Map DomainModel to DTO
+            return Ok(_mapper.Map<List<WalkDTO>>(walksDomainModel));
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using NewZealandWalks.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NewZealandWalks.Data;
 using NewZealandWalks.Models.Domain;
 
 namespace NewZealandWalks.Repositories
@@ -16,6 +17,11 @@ namespace NewZealandWalks.Repositories
             await _db.Walks.AddAsync(walk);
             await _db.SaveChangesAsync();
             return walk;
+        }
+
+        public async Task<List<Walk>> GetAllAsync()
+        {
+           return await _db.Walks.ToListAsync();
         }
     }
 }
