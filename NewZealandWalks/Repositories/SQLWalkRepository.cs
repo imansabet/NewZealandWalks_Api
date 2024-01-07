@@ -21,7 +21,9 @@ namespace NewZealandWalks.Repositories
 
         public async Task<List<Walk>> GetAllAsync()
         {
-           return await _db.Walks.ToListAsync();
+           return await _db.Walks.Include("Difficulty").Include("Region").ToListAsync();
+
         }
     }
 }
+ 
