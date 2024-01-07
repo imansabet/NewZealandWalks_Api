@@ -14,13 +14,13 @@ namespace NewZealandWalks.Controllers
         private readonly IMapper _mapper;
         private readonly IWalkRepository _walkRepository;
 
-        public WalksController(IMapper mapper,IWalkRepository walkRepository)
+        public WalksController(IMapper mapper, IWalkRepository walkRepository)
         {
             _mapper = mapper;
-            _walkRepository= walkRepository;
+            _walkRepository = walkRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateWalk([FromBody] AddWalkRequestDTO addWalkRequestDTO ) 
+        public async Task<IActionResult> CreateWalk([FromBody] AddWalkRequestDTO addWalkRequestDTO)
         {
             //Map DTO to DomainModel
             var walkDomainModel = _mapper.Map<Walk>(addWalkRequestDTO);
@@ -29,15 +29,28 @@ namespace NewZealandWalks.Controllers
             //Map Domain Model to DTO
             return Ok(_mapper.Map<WalkDTO>(walkDomainModel));
 
-            
+
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        { 
+        {
             var walksDomainModel = await _walkRepository.GetAllAsync();
             //Map DomainModel to DTO
             return Ok(_mapper.Map<List<WalkDTO>>(walksDomainModel));
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetWalkById([FromRoute] Guid id) 
+        {
+            var walkDomainModel = await _walkRepository.GetByIdAsync(id);
+            if (walkDomainModel == null)
+            {
+                return NotFound();
+            }
+            //map domain model to DTO
+            return Ok(_mapper.Map<WalkDTO>(walkDomainModel));
         }
 
     }
