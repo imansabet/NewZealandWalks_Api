@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NewZealandWalks.CustomActionFilters;
 using NewZealandWalks.Models.Domain;
 using NewZealandWalks.Models.DTOs;
 using NewZealandWalks.Repositories;
@@ -19,20 +20,18 @@ namespace NewZealandWalks.Controllers
             _mapper = mapper;
             _walkRepository = walkRepository;
         }
+        
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateWalk([FromBody] AddWalkRequestDTO addWalkRequestDTO)
         {
-            if (ModelState.IsValid)
-            {
-                //Map DTO to DomainModel
-                var walkDomainModel = _mapper.Map<Walk>(addWalkRequestDTO);
-                await _walkRepository.CreateAsync(walkDomainModel);
+            
+             //Map DTO to DomainModel
+             var walkDomainModel = _mapper.Map<Walk>(addWalkRequestDTO);
+             await _walkRepository.CreateAsync(walkDomainModel);
 
-                //Map Domain Model to DTO
-                return Ok(_mapper.Map<WalkDTO>(walkDomainModel));
-            }
-            else { return BadRequest(ModelState);  }
-
+             //Map Domain Model to DTO
+             return Ok(_mapper.Map<WalkDTO>(walkDomainModel));
 
         }
 
@@ -59,10 +58,10 @@ namespace NewZealandWalks.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, UpdateWalkRequestDTO updateWalkRequestDTO ) 
         {
-            if (ModelState.IsValid)
-            {
+            
                 //map DTO to domainmodel
                 var walkdomainModel = _mapper.Map<Walk>(updateWalkRequestDTO);
                 walkdomainModel = await _walkRepository.UpdateAsync(id, walkdomainModel);
@@ -71,8 +70,6 @@ namespace NewZealandWalks.Controllers
                     return NotFound();
                 }
                 return Ok(_mapper.Map<WalkDTO>(walkdomainModel));
-            }
-            else { return BadRequest(ModelState); }
         }
 
         [HttpDelete]

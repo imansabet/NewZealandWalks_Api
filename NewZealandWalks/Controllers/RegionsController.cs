@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NewZealandWalks.CustomActionFilters;
 using NewZealandWalks.Data;
 using NewZealandWalks.Models.Domain;
 using NewZealandWalks.Models.DTOs;
@@ -47,6 +48,7 @@ namespace NewZealandWalks.Controllers
         }
         [HttpGet]
         [Route("{id:Guid}")]
+        
         public async Task<IActionResult> GetRegionById([FromRoute]Guid id) 
         {
             //var region = _db.Regions.Find(id);
@@ -67,11 +69,12 @@ namespace NewZealandWalks.Controllers
 
             return Ok(_mapper.Map<RegionDTO>(regionsDomain));
         }
+        
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDTO) 
         {
-            if (ModelState.IsValid)
-            {
+            
                 //map DTO to DomainModel
                 //var regionDomainModel = new Region
                 //{
@@ -97,15 +100,14 @@ namespace NewZealandWalks.Controllers
 
                 //201
                 return CreatedAtAction(nameof(GetRegionById), new { id = regionDTO.Id }, regionDTO);
-            }
-            else { return BadRequest(ModelState); }
+            
         }
+       
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO) 
         {
-            if (ModelState.IsValid) 
-            {
                 //map dto to domain model
                 //var regionDomainModel = new Region
                 //{
@@ -134,10 +136,8 @@ namespace NewZealandWalks.Controllers
 
                 //We Always Pass DTO to Client
                 return Ok(regionDTO);
-
-            }
-            else {  return BadRequest(ModelState); }
         }
+        
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IActionResult> DeleteRegion([FromRoute] Guid id) 
