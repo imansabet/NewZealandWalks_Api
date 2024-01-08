@@ -104,37 +104,39 @@ namespace NewZealandWalks.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO) 
         {
-            //map dto to domain model
-            //var regionDomainModel = new Region
-            //{
-            //   Code = updateRegionRequestDTO.Code,
-            //   Name = updateRegionRequestDTO.Name,
-            //   RegionImageUrl= updateRegionRequestDTO.RegionImageUrl,
-            //};
-            var regionDomainModel = _mapper.Map<Region>(updateRegionRequestDTO);
-
-             regionDomainModel = await _regionRepository.UpdateAsync(id, regionDomainModel);
-            if (regionDomainModel == null) 
+            if (ModelState.IsValid) 
             {
-                return NotFound();
+                //map dto to domain model
+                //var regionDomainModel = new Region
+                //{
+                //   Code = updateRegionRequestDTO.Code,
+                //   Name = updateRegionRequestDTO.Name,
+                //   RegionImageUrl= updateRegionRequestDTO.RegionImageUrl,
+                //};
+                var regionDomainModel = _mapper.Map<Region>(updateRegionRequestDTO);
+
+                regionDomainModel = await _regionRepository.UpdateAsync(id, regionDomainModel);
+                if (regionDomainModel == null)
+                {
+                    return NotFound();
+                }
+
+                await _db.SaveChangesAsync();
+                //Convert DomainModel to DTO
+                //var regionDTO = new RegionDTO 
+                //{
+                //    Id= regionDomainModel.Id,
+                //    Name = regionDomainModel.Name,
+                //    Code = regionDomainModel.Code,
+                //    RegionImageUrl = regionDomainModel.RegionImageUrl,
+                //};
+                var regionDTO = _mapper.Map<RegionDTO>(regionDomainModel);
+
+                //We Always Pass DTO to Client
+                return Ok(regionDTO);
+
             }
-            
-            await _db.SaveChangesAsync();
-            //Convert DomainModel to DTO
-            //var regionDTO = new RegionDTO 
-            //{
-            //    Id= regionDomainModel.Id,
-            //    Name = regionDomainModel.Name,
-            //    Code = regionDomainModel.Code,
-            //    RegionImageUrl = regionDomainModel.RegionImageUrl,
-            //};
-            var regionDTO = _mapper.Map<RegionDTO>(regionDomainModel);
-
-            //We Always Pass DTO to Client
-            return Ok(regionDTO);
-
-
-
+            else {  return BadRequest(ModelState); }
         }
         [HttpDelete]
         [Route("{id:Guid}")]
