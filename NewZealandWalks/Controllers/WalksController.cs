@@ -67,5 +67,18 @@ namespace NewZealandWalks.Controllers
             return Ok(_mapper.Map<WalkDTO>(walkdomainModel));
         }
 
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteWalk([FromRoute] Guid id) 
+        {
+            var deletedWalkDomain = await _walkRepository.DeleteAsync(id);
+            if (deletedWalkDomain == null) 
+            {
+                return NotFound();
+            }
+            //map domain to dto
+            return Ok(_mapper.Map<WalkDTO>(deletedWalkDomain));
+        }
+
     }
 }
