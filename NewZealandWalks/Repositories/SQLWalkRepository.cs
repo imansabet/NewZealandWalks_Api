@@ -35,6 +35,24 @@ namespace NewZealandWalks.Repositories
                 .Include("Region")
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
+        {
+            var existingWalk = await _db.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            if (existingWalk == null) 
+            {
+                return null;
+            }
+            existingWalk.Name = walk.Name;
+            existingWalk.Description = walk.Description;
+            existingWalk.LengthInKm = walk.LengthInKm;
+            existingWalk.RegionId = walk.RegionId;
+            existingWalk.WalkImageUrl = walk.WalkImageUrl;
+            existingWalk.DifficultyId = walk.DifficultyId;
+
+            await _db.SaveChangesAsync();
+            return existingWalk;
+        }
     }
 }
  
