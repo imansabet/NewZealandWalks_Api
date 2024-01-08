@@ -70,31 +70,35 @@ namespace NewZealandWalks.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDTO) 
         {
-            //map DTO to DomainModel
-            //var regionDomainModel = new Region
-            //{
-            //    Code = addRegionRequestDTO.Code,
-            //    Name = addRegionRequestDTO.Name,
-            //    RegionImageUrl = addRegionRequestDTO.RegionImageUrl,
-            //};
-            var regionDomainModel = _mapper.Map<Region>(addRegionRequestDTO);
+            if (ModelState.IsValid)
+            {
+                //map DTO to DomainModel
+                //var regionDomainModel = new Region
+                //{
+                //    Code = addRegionRequestDTO.Code,
+                //    Name = addRegionRequestDTO.Name,
+                //    RegionImageUrl = addRegionRequestDTO.RegionImageUrl,
+                //};
+                var regionDomainModel = _mapper.Map<Region>(addRegionRequestDTO);
 
 
-            //Use DomainModel To create Region
-            regionDomainModel = await _regionRepository.CreateAsync(regionDomainModel);
+                //Use DomainModel To create Region
+                regionDomainModel = await _regionRepository.CreateAsync(regionDomainModel);
 
-            //map DTO to DomainModel
-            //var regionDTO = new RegionDTO 
-            //{
-            //    Id = regionDomainModel.Id,
-            //    Name = regionDomainModel.Name,
-            //    Code = regionDomainModel.Code,
-            //    RegionImageUrl = regionDomainModel.RegionImageUrl,
-            //};
-            var regionDTO = _mapper.Map<RegionDTO>(regionDomainModel);
+                //map DTO to DomainModel
+                //var regionDTO = new RegionDTO 
+                //{
+                //    Id = regionDomainModel.Id,
+                //    Name = regionDomainModel.Name,
+                //    Code = regionDomainModel.Code,
+                //    RegionImageUrl = regionDomainModel.RegionImageUrl,
+                //};
+                var regionDTO = _mapper.Map<RegionDTO>(regionDomainModel);
 
-            //201
-            return CreatedAtAction(nameof(GetRegionById),new {  id = regionDTO.Id },regionDTO);
+                //201
+                return CreatedAtAction(nameof(GetRegionById), new { id = regionDTO.Id }, regionDTO);
+            }
+            else { return BadRequest(ModelState); }
         }
         [HttpPut]
         [Route("{id:Guid}")]
