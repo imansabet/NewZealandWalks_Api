@@ -35,11 +35,14 @@ namespace NewZealandWalks.Controllers
 
         }
 
-        //GET"/api/walks/?filterOn=Name&filterQuery=Track&sortBy=Name&isAscending=true
+        //GET"/api/walks/?filterOn=Name&filterQuery=Track&sortBy=Name&isAscending=true&pageNumber=1&pageSize=10
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending )
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? filterOn, [FromQuery] string? filterQuery
+            , [FromQuery] string? sortBy, [FromQuery] bool? isAscending 
+            , [FromQuery] int  pageNumber = 1, [FromQuery] int pageSize = 1000 )
         {
-            var walksDomainModel = await _walkRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true);
+            var walksDomainModel = await _walkRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true, pageNumber, pageSize);
             //Map DomainModel to DTO
             return Ok(_mapper.Map<List<WalkDTO>>(walksDomainModel));
         }
@@ -57,7 +60,7 @@ namespace NewZealandWalks.Controllers
             return Ok(_mapper.Map<WalkDTO>(walkDomainModel));
         }
 
-        [HttpPut]
+        [HttpPut] 
         [Route("{id:Guid}")]
         [ValidateModel]
         public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, UpdateWalkRequestDTO updateWalkRequestDTO ) 

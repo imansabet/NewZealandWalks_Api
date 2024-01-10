@@ -18,7 +18,10 @@ namespace NewZealandWalks.Repositories
             await _db.SaveChangesAsync();
             return walk;
         }
-        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
+        public async Task<List<Walk>> GetAllAsync(
+            string? filterOn = null, string? filterQuery = null
+            , string? sortBy = null, bool isAscending = true,
+            int pageNumber = 1,int pageSize = 1000)
         { 
             var walks = _db.Walks.Include("Difficulty").Include("Region").AsQueryable();
             //filtering
@@ -40,8 +43,11 @@ namespace NewZealandWalks.Repositories
                     walks = isAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
                 }
             }
+            //pagination
+            var skipResults = (pageNumber - 1) * pageSize;
 
-            return await walks.ToListAsync();
+
+            return await walks.Skip(skipResults).Take(pageSize).ToListAsync();
 
         }
         public async Task<Walk?> GetByIdAsync(Guid id)
