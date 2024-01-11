@@ -43,6 +43,26 @@ namespace NewZealandWalks.Controllers
 
         }
 
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO) 
+        {
+            var user = await _userManager.FindByEmailAsync(loginRequestDTO.Username);
+
+            if (user != null) 
+            {
+                var checkPasswordResult =  await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+                if (checkPasswordResult) 
+                {
+                    //Create Token
+
+                    return Ok();
+                }
+            }
+            return BadRequest("UserName or Password was incorrect");
+                    
+        }
+
     }
 }
  
