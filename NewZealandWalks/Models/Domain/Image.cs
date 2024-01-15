@@ -2,7 +2,7 @@
 
 namespace NewZealandWalks.Models.Domain
 {
-    public class Images
+    public class Image
     {
         public Guid Id { get; set; }
         [NotMapped]
