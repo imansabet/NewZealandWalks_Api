@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NewZealandWalks.Data;
 using NewZealandWalks.Mappings;
+using NewZealandWalks.Middlewares;
 using NewZealandWalks.Repositories;
 using Serilog;
 using System.Text;
@@ -110,6 +111,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

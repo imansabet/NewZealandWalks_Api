@@ -43,6 +43,10 @@ namespace NewZealandWalks.Controllers
             , [FromQuery] int  pageNumber = 1, [FromQuery] int pageSize = 1000 )
         {
             var walksDomainModel = await _walkRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending ?? true, pageNumber, pageSize);
+
+            //create an exception
+            throw new Exception("This is a new Exception");
+
             //Map DomainModel to DTO
             return Ok(_mapper.Map<List<WalkDTO>>(walksDomainModel));
         }
