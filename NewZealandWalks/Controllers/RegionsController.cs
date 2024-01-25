@@ -82,7 +82,7 @@ namespace NewZealandWalks.Controllers
         
         [HttpPost]
         [ValidateModel]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDTO) 
         {
             
@@ -117,7 +117,7 @@ namespace NewZealandWalks.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO) 
         {
                 //map dto to domain model
@@ -152,7 +152,7 @@ namespace NewZealandWalks.Controllers
         
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteRegion([FromRoute] Guid id) 
         {
             var regionDomainModel = await _regionRepository.DeleteAsync(id);
