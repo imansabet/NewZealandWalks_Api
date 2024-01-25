@@ -33,7 +33,7 @@ namespace NewZealandWalks.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Reader,Writer" )]
+        //[Authorize(Roles = "Reader,Writer" )]
         public async Task<IActionResult> GetAll() 
         {
             _logger.LogInformation("GetAll Action Method Was Invoked");
@@ -58,7 +58,7 @@ namespace NewZealandWalks.Controllers
         
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
          public async Task<IActionResult> GetRegionById([FromRoute]Guid id) 
         {
             //var region = _db.Regions.Find(id);
