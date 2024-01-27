@@ -93,9 +93,27 @@ namespace NZWalks.UI.Controllers
             var response = await httpResponseMessage.Content.ReadFromJsonAsync<RegionDTO>();
             if (response is not null)
             {
-                return RedirectToAction("Edit","Regions");
+                return RedirectToAction("index","Regions");
             }
             return View() ;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(RegionDTO request) 
+        {
+            try 
+            {
+                var client = _httpClientFactory.CreateClient();
+                var httpResponseMessage = await client.DeleteAsync($"https://localhost:7001/api/regions/{request.Id}");
+                httpResponseMessage.EnsureSuccessStatusCode();
+
+                return RedirectToAction("index","Regions");
+            }
+            catch(Exception ex) 
+            {
+                
+            }
+            return View("Edit");
+
         }
     }
 }
